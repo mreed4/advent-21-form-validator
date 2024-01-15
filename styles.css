@@ -79,22 +79,25 @@ input[type="password"]:focus + label {
 
 .show-hide {
   border: none;
-  background: url("./images/show.svg") left top no-repeat;
+  background-image: url("./images/show.svg");
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-size: 32px 32px;
   width: 32px;
   height: 32px;
   position: absolute;
   left: 405px;
-  top: 32px;
+  top: 28px;
   cursor: pointer;
+  transition: background-image 200ms ease-in-out;
 }
 
 .show .show-hide {
   background-image: url("./images/hide.svg");
-  background-size: 32px 32px;
-  top: 28px;
 }
 
-input[type="submit"] {
+button[type="submit"] {
   background: var(--primary);
   color: white;
   border-radius: 4px;
@@ -104,6 +107,22 @@ input[type="submit"] {
   height: 62px;
   font-size: 1.5rem;
   margin-top: 10px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background: #0d00e4;
+}
+
+button[type="submit"]:disabled {
+  background: #d4d4d4;
+  opacity: 0.5;
+  cursor: pointer;
+  pointer-events: none;
+}
+
+button[type="submit"]:disabled:hover {
+  background: #d4d4d4;
 }
 
 .error,
