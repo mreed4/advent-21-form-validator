@@ -128,3 +128,7 @@ input[type="submit"] {
 .success img {
   margin-right: 5px;
 }
+
+.display-none {
+  display: none;
+}
