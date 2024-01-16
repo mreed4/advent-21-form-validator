@@ -1,14 +1,25 @@
-const allFields = document.querySelectorAll(".field");
-const allShowPasswordButtons = document.querySelectorAll(".show-hide");
-const form = document.querySelector("form");
-const submitButton = document.querySelector("button[type='submit']");
-
 (function init() {
   hideValidationDivs();
   initEventListeners();
 })();
 
+function hideValidationDivs() {
+  /* */
+  const allErrorDivs = document.querySelectorAll(".error");
+  const allSuccessDivs = document.querySelectorAll(".success");
+  const validationDivs = [...allErrorDivs, ...allSuccessDivs];
+
+  validationDivs.forEach((div) => {
+    div.classList.add("display-none");
+  });
+}
+
 function initEventListeners() {
+  /* */
+  const allInputs = document.querySelectorAll("input");
+  const allShowPasswordButtons = document.querySelectorAll(".show-hide");
+  const form = document.querySelector("form");
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     console.log("Form submitted");
@@ -19,23 +30,41 @@ function initEventListeners() {
   });
 
   document.addEventListener("keyup", (event) => {
+    /* */
     if (event.altKey && event.key === "s") {
       console.log("alt + s");
       showHidePassword(event);
     }
   });
+
+  allInputs.forEach((input) => {
+    /* */
+    input.addEventListener("keyup", (event) => {
+      const errorDiv = input.parentElement.querySelector(".error");
+      const successDiv = input.parentElement.querySelector(".success");
+
+      validateField(event, errorDiv, successDiv);
+    });
+
+    input.addEventListener("keyup", (event) => {
+      checkInputs(allInputs);
+    });
+  });
 }
 
-function toggleSubmitButton() {
+function checkInputs(allInputs) {
   /* */
-  const isDisabled = submitButton.hasAttribute("disabled");
+  const submitButton = document.querySelector("button[type='submit']");
+  const allSuccessDivs = document.querySelectorAll(".success:not(.display-none)");
 
-  if (isDisabled) {
-    submitButton.removeAttribute("disabled");
+  console.log(allSuccessDivs.length, allInputs.length);
+
+  if (allSuccessDivs.length === allInputs.length) {
+    submitButton.disabled = false;
   }
 
-  if (!isDisabled) {
-    submitButton.setAttribute("disabled", "disabled");
+  if (allSuccessDivs.length !== allInputs.length) {
+    submitButton.disabled = true;
   }
 }
 
@@ -56,24 +85,6 @@ function showHidePassword(event) {
   }
 }
 
-function hideValidationDivs() {
-  /* */
-  [...allFields]
-    .filter((field) => field.childElementCount > 1) // filter out fields with only one child
-    .forEach((field) => {
-      const validationDivs = [...field.children].filter((child) => child.localName === "div");
-      const [errorDiv, successDiv] = validationDivs;
-
-      validationDivs.forEach((div) => {
-        div.classList.add("display-none");
-      });
-
-      field.addEventListener("input", (event) => {
-        validateField(event, errorDiv, successDiv);
-      });
-    });
-}
-
 function validateField(event, errorDiv, successDiv) {
   /* */
   const { id, value } = event.target;
@@ -82,7 +93,7 @@ function validateField(event, errorDiv, successDiv) {
     emailTest(value, errorDiv, successDiv);
   }
 
-  if (id !== "email") {
+  if (id === "name") {
     defaultTest(value.length, errorDiv, successDiv);
   }
 
@@ -93,60 +104,61 @@ function validateField(event, errorDiv, successDiv) {
   if (id === "confirm-password") {
     testPasswordsMatch(errorDiv, successDiv);
   }
-}
 
-function emailTest(email, errorDiv, successDiv) {
-  /* */
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+  function emailTest(email, errorDiv, successDiv) {
+    /* */
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
 
-  if (emailRegex.test(email)) {
-    successDiv.classList.remove("display-none");
-    errorDiv.classList.add("display-none");
+    if (emailRegex.test(email)) {
+      successDiv.classList.remove("display-none");
+      errorDiv.classList.add("display-none");
+    }
+
+    if (!emailRegex.test(email)) {
+      successDiv.classList.add("display-none");
+      errorDiv.classList.remove("display-none");
+    }
   }
 
-  if (!emailRegex.test(email)) {
-    successDiv.classList.add("display-none");
-    errorDiv.classList.remove("display-none");
-  }
-}
+  function defaultTest(length, errorDiv, successDiv) {
+    /* */
+    if (length >= 2) {
+      successDiv.classList.remove("display-none");
+      errorDiv.classList.add("display-none");
+    }
 
-function defaultTest(length, errorDiv, successDiv) {
-  /* */
-  if (length >= 2) {
-    successDiv.classList.remove("display-none");
-    errorDiv.classList.add("display-none");
-  }
-
-  if (length < 2) {
-    successDiv.classList.add("display-none");
-    errorDiv.classList.remove("display-none");
-  }
-}
-
-function passwordTest(password, errorDiv, successDiv) {
-  /* */
-  if (password.length >= 8) {
-    successDiv.classList.remove("display-none");
-    errorDiv.classList.add("display-none");
+    if (length < 2) {
+      successDiv.classList.add("display-none");
+      errorDiv.classList.remove("display-none");
+    }
   }
 
-  if (password.length < 8) {
-    successDiv.classList.add("display-none");
-    errorDiv.classList.remove("display-none");
-  }
-}
-function testPasswordsMatch(errorDiv, successDiv) {
-  /* */
-  const password = document.querySelector("#password").value;
-  const confirmPassword = document.querySelector("#confirm-password").value;
+  function passwordTest(password, errorDiv, successDiv) {
+    /* */
+    if (password.length >= 8) {
+      successDiv.classList.remove("display-none");
+      errorDiv.classList.add("display-none");
+    }
 
-  if (password === confirmPassword) {
-    successDiv.classList.remove("display-none");
-    errorDiv.classList.add("display-none");
+    if (password.length < 8) {
+      successDiv.classList.add("display-none");
+      errorDiv.classList.remove("display-none");
+    }
   }
 
-  if (password !== confirmPassword) {
-    successDiv.classList.add("display-none");
-    errorDiv.classList.remove("display-none");
+  function testPasswordsMatch(errorDiv, successDiv) {
+    /* */
+    const password = document.querySelector("#password").value;
+    const confirmPassword = document.querySelector("#confirm-password").value;
+
+    if (password === confirmPassword) {
+      successDiv.classList.remove("display-none");
+      errorDiv.classList.add("display-none");
+    }
+
+    if (password !== confirmPassword) {
+      successDiv.classList.add("display-none");
+      errorDiv.classList.remove("display-none");
+    }
   }
 }

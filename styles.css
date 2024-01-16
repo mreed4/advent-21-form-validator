@@ -108,6 +108,7 @@ button[type="submit"] {
   font-size: 1.5rem;
   margin-top: 10px;
   cursor: pointer;
+  user-select: none;
 }
 
 button[type="submit"]:hover {
