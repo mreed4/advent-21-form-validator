@@ -1,0 +1,5 @@
+This might have been the most challenging challenge so far. Here we had to implement client side input validation. The challenge calls for the validation checks to trigger when an input at or after a `blur` event. However, this seems like bad UX decision so I changed it to a `keyup` event. Now the checks will happen in real time, as the user is typing.
+
+We also had to implement a toggle to show/hide password. I had actually built something like this before, though this challenge's HTML implementation was very odd. The `show` class--the class that indicates if the password is shown--is toggled in the _parent class of the input_, not on the toggle button itself. I also improved the show-hide button CSS such that it now appears to animate.
+
+Though the challenge doesnt call for it, the Submit button is also disabled by default (on page load). I added a check to see if all fields are valid. If they are all valid, then the Submit button is enabled. If some or all inputs are invalid, then the button is disabled. I am especilaly proud of the logic here.
