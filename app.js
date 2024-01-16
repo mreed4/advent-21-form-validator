@@ -44,9 +44,6 @@ function initEventListeners() {
       const successDiv = input.parentElement.querySelector(".success");
 
       validateField(event, errorDiv, successDiv);
-    });
-
-    input.addEventListener("keyup", (event) => {
       checkInputs(allInputs);
     });
   });
@@ -104,61 +101,61 @@ function validateField(event, errorDiv, successDiv) {
   if (id === "confirm-password") {
     testPasswordsMatch(errorDiv, successDiv);
   }
+}
 
-  function emailTest(email, errorDiv, successDiv) {
-    /* */
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+function emailTest(email, errorDiv, successDiv) {
+  /* */
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
 
-    if (emailRegex.test(email)) {
-      successDiv.classList.remove("display-none");
-      errorDiv.classList.add("display-none");
-    }
-
-    if (!emailRegex.test(email)) {
-      successDiv.classList.add("display-none");
-      errorDiv.classList.remove("display-none");
-    }
+  if (emailRegex.test(email)) {
+    successDiv.classList.remove("display-none");
+    errorDiv.classList.add("display-none");
   }
 
-  function defaultTest(length, errorDiv, successDiv) {
-    /* */
-    if (length >= 2) {
-      successDiv.classList.remove("display-none");
-      errorDiv.classList.add("display-none");
-    }
+  if (!emailRegex.test(email)) {
+    successDiv.classList.add("display-none");
+    errorDiv.classList.remove("display-none");
+  }
+}
 
-    if (length < 2) {
-      successDiv.classList.add("display-none");
-      errorDiv.classList.remove("display-none");
-    }
+function defaultTest(length, errorDiv, successDiv) {
+  /* */
+  if (length >= 2) {
+    successDiv.classList.remove("display-none");
+    errorDiv.classList.add("display-none");
   }
 
-  function passwordTest(password, errorDiv, successDiv) {
-    /* */
-    if (password.length >= 8) {
-      successDiv.classList.remove("display-none");
-      errorDiv.classList.add("display-none");
-    }
+  if (length < 2) {
+    successDiv.classList.add("display-none");
+    errorDiv.classList.remove("display-none");
+  }
+}
 
-    if (password.length < 8) {
-      successDiv.classList.add("display-none");
-      errorDiv.classList.remove("display-none");
-    }
+function passwordTest(password, errorDiv, successDiv) {
+  /* */
+  if (password.length >= 8) {
+    successDiv.classList.remove("display-none");
+    errorDiv.classList.add("display-none");
   }
 
-  function testPasswordsMatch(errorDiv, successDiv) {
-    /* */
-    const password = document.querySelector("#password").value;
-    const confirmPassword = document.querySelector("#confirm-password").value;
+  if (password.length < 8) {
+    successDiv.classList.add("display-none");
+    errorDiv.classList.remove("display-none");
+  }
+}
 
-    if (password === confirmPassword) {
-      successDiv.classList.remove("display-none");
-      errorDiv.classList.add("display-none");
-    }
+function testPasswordsMatch(errorDiv, successDiv) {
+  /* */
+  const password = document.querySelector("#password").value;
+  const confirmPassword = document.querySelector("#confirm-password").value;
 
-    if (password !== confirmPassword) {
-      successDiv.classList.add("display-none");
-      errorDiv.classList.remove("display-none");
-    }
+  if (password === confirmPassword) {
+    successDiv.classList.remove("display-none");
+    errorDiv.classList.add("display-none");
+  }
+
+  if (password !== confirmPassword) {
+    successDiv.classList.add("display-none");
+    errorDiv.classList.remove("display-none");
   }
 }
